@@ -1399,6 +1399,42 @@ window.onload = function() {
 		}
 	});
 
+	$("#test1").click(function() {
+		var code = editor.getValue();
+		$("#console").empty();
+		try {
+			eval(code);
+			$("#console").append("No error reports");
+		} catch (e) {
+			//alert(e);
+			$("#console").append(e);
+		}
+	});
+
+	$("#test2").click(function() {
+		var code = editor2.getValue();
+		$("#console").empty();
+		try {
+			eval(code);
+			$("#console").append("No error reports");
+		} catch (e) {
+			//alert(e);
+			$("#console").append(e);
+		}
+	});
+
+	$("#test3").click(function() {
+		var code = editor3.getValue();
+		$("#console").empty();
+		try {
+			eval(code);
+			$("#console").append("No error reports");
+		} catch (e) {
+			//alert(e);
+			$("#console").append(e);
+		}
+	});
+
 	$("#reload").click(function() {
 		$.post("/submission/read/" + curProblem.id, {
 			currentUser: true,

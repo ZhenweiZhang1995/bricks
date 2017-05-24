@@ -1235,6 +1235,34 @@ window.onload = function() {
 			addFolder(folder);
 		});
 	});
+
+	/*******
+	add tab function
+	*******/
+
+	$("div#tabs").tabs();
+
+	$("button#add-tab").click(function() {
+
+		var num_tabs = $("div#tabs ul li").length + 1;
+
+
+		$("div#tabs ul").append(
+			"<li><a data-toggle='pill' href='#editor" + num_tabs + "'>Console" +
+			num_tabs + "</a></li>"
+		);
+		$("div#tabs").append(
+			"<div id='editor" + num_tabs + "'>#hahah" + num_tabs + "</div>"
+		);
+
+
+
+		$("div#tabs").tabs("refresh");
+
+
+	});
+
+
 	editor = CodeMirror.fromTextArea(codemirror1, {
 		mode: "javascript",
 		styleActiveLine: true,

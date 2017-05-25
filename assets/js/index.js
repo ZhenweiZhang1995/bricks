@@ -458,7 +458,7 @@ function fillReloadModal(submission) {
 
 	$("#loadSubmission").unbind('click');
 	$("#loadSubmission").click(function() {
-		editor.setValue(submission.code);
+		editors[1].setValue(submission.code);
 	});
 }
 
@@ -715,17 +715,23 @@ function updateScore() {
 }
 
 function changeFontSize(size) {
-	editor.getWrapperElement().style["font-size"] = size + "px";
-	editor.refresh();
-	editor2.getWrapperElement().style["font-size"] = size + "px";
-	editor2.refresh();
-	editor3.getWrapperElement().style["font-size"] = size + "px";
-	editor3.refresh();
+	// editor.getWrapperElement().style["font-size"] = size + "px";
+	// editor.refresh();
+	// editor2.getWrapperElement().style["font-size"] = size + "px";
+	// editor2.refresh();
+	// editor3.getWrapperElement().style["font-size"] = size + "px";
+	// editor3.refresh();
+
+	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+		editors[i].refresh();
+		editors[i].getWrapperElement().style["font-size"] = size + "px";
+	}
 }
 
+var editors = [];
 var editor;
-var editor2;
-var editor3;
+var consolelength = 3;
+
 var modalEditor;
 var requestModalEditor;
 var reloadEditor;
@@ -1091,7 +1097,13 @@ function publishCode() {
 	}
 	$("#pubCodeIcon").addClass('glyphicon-ban-circle');
 
-	var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+	// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+
+	var code = '';
+	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+		code = code + editors[i].getValue() + '\n';
+	}
+
 	$.post("/share/publish/", {
 			donorname: "_SUPER_USER__",
 			code: code
@@ -1125,7 +1137,7 @@ function getPublishedCode() {
 			console.log("get published code");
 			var txt = share.code;
 			if (!(txt == null)) {
-				editor.setValue(txt);
+				editors[1].setValue(txt);
 				setConsoleResultMessage(
 					"Published code is now in the main editor window\n "
 				)
@@ -1222,7 +1234,11 @@ window.onload = function() {
 	setInterval(
 		function() {
 			//save current code into user modelget
-			var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+			var code = '';
+			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+				code = code + editors[i].getValue() + '\n';
+			}
 			$.post("/user/saveCode/", {
 				code: code
 			}, function(user) {});
@@ -1251,79 +1267,70 @@ window.onload = function() {
 			"<li><a data-toggle='pill' href='#editor" + num_tabs + "'>Console" +
 			num_tabs + "</a></li>"
 		);
-		$("div#tabs").append(
-			"<div id='editor" + num_tabs + "'>#hahah" + num_tabs + "</div>"
+
+
+		$("div#tabs .tab-content").append(
+			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>Console " +
+			num_tabs +
+			"<button id='test" + num_tabs +
+			"'type='button' class='btn btn-warning' style='width:20%;text-align:center;margin-bottom:3px;margin-left:5%'><span id='accShowIcon' class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
+			num_tabs + "'></textarea></div></div> "
 		);
 
-
-
+		console.log(editors);
+		consolelength++;
+		console.log(consolelength);
+		editors[consolelength] = CodeMirror.fromTextArea(document.getElementById(
+			"codemirror" +
+			consolelength), {
+			mode: "javascript",
+			styleActiveLine: true,
+			lineNumbers: true,
+			lineWrapping: true,
+			theme: "mbo",
+			extraKeys: {
+				"F11": function(cm) {
+					if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+						$(".CodeMirror").css("font-size", "150%");
+					} else {
+						$(".CodeMirror").css("font-size", "115%");
+					}
+				},
+				"Esc": function(cm) {
+					if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+					$(".CodeMirror").css("font-size", "100%");
+				}
+			}
+		});
 		$("div#tabs").tabs("refresh");
 
-
 	});
 
-
-	editor = CodeMirror.fromTextArea(codemirror1, {
-		mode: "javascript",
-		styleActiveLine: true,
-		lineNumbers: true,
-		lineWrapping: true,
-		theme: "mbo",
-		extraKeys: {
-			"F11": function(cm) {
-				if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
-					$(".CodeMirror").css("font-size", "150%");
-				} else {
-					$(".CodeMirror").css("font-size", "115%");
+	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+		editors[i] = CodeMirror.fromTextArea(document.getElementById("codemirror" +
+			i), {
+			mode: "javascript",
+			styleActiveLine: true,
+			lineNumbers: true,
+			lineWrapping: true,
+			theme: "mbo",
+			extraKeys: {
+				"F11": function(cm) {
+					if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+						$(".CodeMirror").css("font-size", "150%");
+					} else {
+						$(".CodeMirror").css("font-size", "115%");
+					}
+				},
+				"Esc": function(cm) {
+					if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+					$(".CodeMirror").css("font-size", "100%");
 				}
-			},
-			"Esc": function(cm) {
-				if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-				$(".CodeMirror").css("font-size", "100%");
 			}
-		}
-	});
-	editor2 = CodeMirror.fromTextArea(codemirror2, {
-		mode: "javascript",
-		styleActiveLine: true,
-		lineNumbers: true,
-		lineWrapping: true,
-		theme: "mbo",
-		extraKeys: {
-			"F11": function(cm) {
-				if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
-					$(".CodeMirror").css("font-size", "150%");
-				} else {
-					$(".CodeMirror").css("font-size", "115%");
-				}
-			},
-			"Esc": function(cm) {
-				if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-				$(".CodeMirror").css("font-size", "100%");
-			}
-		}
-	});
+		});
+	}
+	// console.log(editors);
 
-	editor3 = CodeMirror.fromTextArea(codemirror3, {
-		mode: "javascript",
-		styleActiveLine: true,
-		lineNumbers: true,
-		lineWrapping: true,
-		theme: "mbo",
-		extraKeys: {
-			"F11": function(cm) {
-				if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
-					$(".CodeMirror").css("font-size", "150%");
-				} else {
-					$(".CodeMirror").css("font-size", "115%");
-				}
-			},
-			"Esc": function(cm) {
-				if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-				$(".CodeMirror").css("font-size", "100%");
-			}
-		}
-	});
 
 	modalEditor = CodeMirror.fromTextArea(modalCodemirror, {
 		mode: "javascript",
@@ -1416,7 +1423,11 @@ window.onload = function() {
 	});
 
 	$("#test").click(function() {
-		var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+		// var code = editor.() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+		var code = '';
+		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+			code = code + editors[i].getValue() + '\n';
+		}
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1428,7 +1439,7 @@ window.onload = function() {
 	});
 
 	$("#test1").click(function() {
-		var code = editor.getValue();
+		var code = editors[1].getValue();
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1440,7 +1451,7 @@ window.onload = function() {
 	});
 
 	$("#test2").click(function() {
-		var code = editor2.getValue();
+		var code = editors[2].getValue();
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1452,7 +1463,7 @@ window.onload = function() {
 	});
 
 	$("#test3").click(function() {
-		var code = editor3.getValue();
+		var code = editors[3].getValue();
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1469,13 +1480,17 @@ window.onload = function() {
 			limitOne: true
 		}, function(submissions) {
 			submissions.forEach(function(submission) {
-				editor.setValue(submission.code);
+				editors[1].setValue(submission.code);
 			});
 		});
 	});
 
 	$("#save").click(function() {
-		var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+		// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+		var code = '';
+		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+			code = code + editors[i].getValue() + '\n';
+		}
 		$.post("/user/saveCode", {
 			code: code
 		}, function(user) {
@@ -1511,8 +1526,13 @@ window.onload = function() {
 			alert("You must select a problem before submitting");
 		} else {
 			$("#console").empty();
-			var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3
-				.getValue();
+
+			var code = '';
+			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+				code = code + editors[i].getValue() + '\n';
+			}
+			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3
+			// 	.getValue();
 			try {
 				if (curProblem.language == "javascript") {
 					var AST = acorn.parse(code); // return an abstract syntax tree structure
@@ -1640,15 +1660,21 @@ window.onload = function() {
 	});
 
 	resizeWindow();
-	editor.refresh();
-	editor2.refresh();
-	editor3.refresh();
+	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+		editors[i].refresh();
+	}
+	// editor.refresh();
+	// editor2.refresh();
+	// editor3.refresh();
 
 	$(window).resize(function() {
 		resizeWindow();
-		editor.refresh();
-		editor2.refresh();
-		editor3.refresh();
+		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+			editors[i].refresh();
+		}
+		// editor.refresh();
+		// editor2.refresh();
+		// editor3.refresh();
 	});
 
 	$('#expandSidebarIn').on('click', function() {
@@ -1683,9 +1709,12 @@ window.onload = function() {
 			$("#accShow").addClass('hidden');
 		}
 		setTimeout(function() {
-			editor.refresh();
-			editor2.refresh();
-			editor3.refresh();
+			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+				editors[i].refresh();
+			}
+			// editor.refresh();
+			// editor2.refresh();
+			// editor3.refresh();
 		}, 10);
 		return false;
 	});
@@ -1723,9 +1752,12 @@ window.onload = function() {
 			$("#accShow").removeClass('hidden');
 		}
 		setTimeout(function() {
-			editor.refresh();
-			editor2.refresh();
-			editor3.refresh();
+			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+				editors[i].refresh();
+			}
+			// editor.refresh();
+			// editor2.refresh();
+			// editor3.refresh();
 		}, 10);
 		return false;
 	});

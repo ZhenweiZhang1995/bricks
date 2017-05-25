@@ -723,8 +723,8 @@ function changeFontSize(size) {
 	// editor3.refresh();
 
 	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-		editors[i].refresh();
 		editors[i].getWrapperElement().style["font-size"] = size + "px";
+		editors[i].refresh();
 	}
 }
 
@@ -1273,7 +1273,7 @@ window.onload = function() {
 			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>Console " +
 			num_tabs +
 			"<button id='test" + num_tabs +
-			"'type='button' class='btn btn-warning' style='width:20%;text-align:center;margin-bottom:3px;margin-left:5%'><span id='accShowIcon' class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
+			"'type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span id='accShowIcon' class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
 			num_tabs + "'></textarea></div></div> "
 		);
 
@@ -1302,6 +1302,21 @@ window.onload = function() {
 				}
 			}
 		});
+
+		var currentTest = "#test" + num_tabs;
+		$(currentTest).click(function() {
+			console.log("test button clicked");
+			var code = editors[num_tabs].getValue();
+			$("#console").empty();
+			try {
+				eval(code);
+				$("#console").append("No error reports");
+			} catch (e) {
+				$("#console").append(e);
+			}
+		});
+
+
 		$("div#tabs").tabs("refresh");
 
 	});
@@ -1423,7 +1438,6 @@ window.onload = function() {
 	});
 
 	$("#test").click(function() {
-		// var code = editor.() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 		var code = '';
 		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 			code = code + editors[i].getValue() + '\n';

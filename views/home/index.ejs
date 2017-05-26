@@ -853,16 +853,16 @@ document.title="Bricks 4.0 JavaScript";
 
     <div class="row" id= "tabs">
         <ul class="nav nav-pills">
-          <li class="active"><a data-toggle="pill" href="#main">Main</a></li>
-          <li><a data-toggle="pill" href="#editor2">Console2</a></li>
-          <li><a data-toggle="pill" href="#editor3">Console3</a></li>
+          <li class="active"><a data-toggle="pill" id="list1" href="#main">Main</a></li>
+          <li><a data-toggle="pill" id="list2" href="#editor2">Console2</a></li>
+          <li><a data-toggle="pill" id="list3" href="#editor3">Console3</a></li>
         </ul>
 
         <div class="tab-content">
           <div id="main" class="tab-pane fade in active">
             <h3>Main Console
               <button id="test1" type="button" class="btn btn-warning"
-                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
+                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%;">
                 <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
                    style="font-size:12pt;">
                 </span>
@@ -881,6 +881,14 @@ document.title="Bricks 4.0 JavaScript";
 
             <!--CodeMirror End-->
 
+            <button id="remove1" type="button" class="btn btn-danger"
+              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
+              <span id="accShowIcon" class="glyphicon glyphicon-remove" aria-hidden="true"
+                 style="font-size:12pt;">
+              </span>
+              &nbsp Remove Current Console
+            </button>
+
           </div>
 
           <div id="editor2" class="tab-pane fade">
@@ -896,10 +904,18 @@ document.title="Bricks 4.0 JavaScript";
 
             <!--CodeMirror Start-->
             <div class="row" style="height:100%">
-                  <textarea id="codemirror2">//Seperator of Consoles</textarea>
+                  <textarea id="codemirror2"></textarea>
             </div>
 
             <!--CodeMirror End-->
+
+            <button id="remove2" type="button" class="btn btn-danger"
+              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
+              <span id="accShowIcon" class="glyphicon glyphicon-remove" aria-hidden="true"
+                 style="font-size:12pt;">
+              </span>
+              &nbsp Remove Current Console
+            </button>
 
           </div>
 
@@ -916,10 +932,18 @@ document.title="Bricks 4.0 JavaScript";
 
             <!--CodeMirror Start-->
             <div class="row" style="height:100%">
-              <textarea id="codemirror3">//Seperator of Consoles</textarea>
+              <textarea id="codemirror3"></textarea>
             </div>
 
             <!--CodeMirror End-->
+
+            <button id="remove3" type="button" class="btn btn-danger"
+              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
+              <span id="accShowIcon" class="glyphicon glyphicon-remove" aria-hidden="true"
+                 style="font-size:12pt;">
+              </span>
+              &nbsp Remove Current Console
+            </button>
 
           </div>
         </div>

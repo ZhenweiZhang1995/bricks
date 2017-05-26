@@ -1264,7 +1264,8 @@ window.onload = function() {
 
 
 		$("div#tabs ul").append(
-			"<li><a data-toggle='pill' href='#editor" + num_tabs + "'>Console" +
+			"<li><a data-toggle='pill' href='#editor" + num_tabs + "'id='list" +
+			num_tabs + "'>Console" +
 			num_tabs + "</a></li>"
 		);
 
@@ -1273,13 +1274,20 @@ window.onload = function() {
 			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>Console " +
 			num_tabs +
 			"<button id='test" + num_tabs +
-			"'type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span id='accShowIcon' class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
+			"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
 			num_tabs + "'></textarea></div></div> "
 		);
 
+		var listid = "list" + num_tabs;
+		document.getElementById(listid).addEventListener("click",
+			getCurrentTabID);
+
+		var testid = "test" + num_tabs;
+		document.getElementById(testid).addEventListener("click",
+			testCurrentConsole);
+
 		console.log(editors);
 		consolelength++;
-		console.log(consolelength);
 		editors[consolelength] = CodeMirror.fromTextArea(document.getElementById(
 			"codemirror" +
 			consolelength), {
@@ -1302,24 +1310,35 @@ window.onload = function() {
 				}
 			}
 		});
-
-		var currentTest = "#test" + num_tabs;
-		$(currentTest).click(function() {
-			console.log("test button clicked");
-			var code = editors[num_tabs].getValue();
-			$("#console").empty();
-			try {
-				eval(code);
-				$("#console").append("No error reports");
-			} catch (e) {
-				$("#console").append(e);
-			}
-		});
-
-
 		$("div#tabs").tabs("refresh");
 
+
 	});
+
+	function getCurrentTabID() {
+		var id = $("#tabs").tabs('option', 'active') + 1;
+		console.log(id);
+		currentTest = "#test" + id;
+		console.log(currentTest);
+		return id;
+	}
+
+	function testCurrentConsole() {
+		var currentid = getCurrentTabID();
+		var currentTest = "#test" + getCurrentTabID();
+		console.log(currentTest);
+		console.log("test button clicked");
+		var code = editors[currentid].getValue();
+		$("#console").empty();
+		try {
+			eval(code);
+			$("#console").append("No error reports");
+		} catch (e) {
+			$("#console").append(e);
+		}
+	}
+
+
 
 	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 		editors[i] = CodeMirror.fromTextArea(document.getElementById("codemirror" +

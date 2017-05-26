@@ -1160,6 +1160,20 @@ window.onload = function() {
 
 	)();
 
+	// $(function() {
+	// 	$("#sortable").sortable();
+	// 	$("#sortable").disableSelection();
+	// });
+
+	$(function() {
+		$("#sortable").sortable({
+			stop: function(event, ui) {
+				alert($(this).sortable('serialize'));
+			}
+		});
+		$("#sortable").disableSelection();
+	});
+
 	$.post("/setting/read/", {
 		name: "feedback"
 	}, function(setting) {
@@ -1275,7 +1289,9 @@ window.onload = function() {
 			num_tabs +
 			"<button id='test" + num_tabs +
 			"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
-			num_tabs + "'></textarea></div></div> "
+			num_tabs + "'></textarea></div>" +
+			"<button id='remove" + num_tabs +
+			"' type='button' class='btn btn-danger' style='width:210px;text-align:center;margin-bottom:3px;margin-top:2%'><span class='glyphicon glyphicon-remove' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Remove Current Console</button>"
 		);
 
 		var listid = "list" + num_tabs;
@@ -1285,6 +1301,10 @@ window.onload = function() {
 		var testid = "test" + num_tabs;
 		document.getElementById(testid).addEventListener("click",
 			testCurrentConsole);
+
+		var removeid = "remove" + num_tabs;
+		document.getElementById(removeid).addEventListener("click",
+			removeCurrentConsole);
 
 		console.log(editors);
 		consolelength++;
@@ -1336,6 +1356,18 @@ window.onload = function() {
 		} catch (e) {
 			$("#console").append(e);
 		}
+	}
+
+	function removeCurrentConsole() {
+		var currentid = getCurrentTabID();
+		var currentRemove = "#list" + getCurrentTabID();
+		console.log(currentRemove);
+		console.log("remove button clicked");
+		// var panelId = $(this).closest("li").remove().attr("aria-controls");
+		$(currentRemove).closest("li").remove()
+		tabs.tabs("refresh");
+
+
 	}
 
 

@@ -1160,15 +1160,12 @@ window.onload = function() {
 
 	)();
 
-	// $(function() {
-	// 	$("#sortable").sortable();
-	// 	$("#sortable").disableSelection();
-	// });
-
+	var tabOrder;
 	$(function() {
 		$("#sortable").sortable({
 			stop: function(event, ui) {
-				alert($(this).sortable('serialize'));
+				tabOrder = $(this).sortable('toArray');
+				console.log(tabOrder);
 			}
 		});
 		$("#sortable").disableSelection();
@@ -1276,13 +1273,9 @@ window.onload = function() {
 
 		var num_tabs = $("div#tabs ul li").length + 1;
 
-
 		$("div#tabs ul").append(
-			"<li><a data-toggle='pill' href='#editor" + num_tabs + "'id='list" +
-			num_tabs + "'>Console" +
-			num_tabs + "</a></li>"
-		);
-
+			"<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
+			num_tabs + "'>Console" + num_tabs + "</a></li>");
 
 		$("div#tabs .tab-content").append(
 			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>Console " +
@@ -1294,7 +1287,7 @@ window.onload = function() {
 			"' type='button' class='btn btn-danger' style='width:210px;text-align:center;margin-bottom:3px;margin-top:2%'><span class='glyphicon glyphicon-remove' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Remove Current Console</button>"
 		);
 
-		var listid = "list" + num_tabs;
+		var listid = "list_" + num_tabs;
 		document.getElementById(listid).addEventListener("click",
 			getCurrentTabID);
 
@@ -1360,7 +1353,7 @@ window.onload = function() {
 
 	function removeCurrentConsole() {
 		var currentid = getCurrentTabID();
-		var currentRemove = "#list" + getCurrentTabID();
+		var currentRemove = "#list_" + getCurrentTabID();
 		console.log(currentRemove);
 		console.log("remove button clicked");
 		// var panelId = $(this).closest("li").remove().attr("aria-controls");
@@ -1491,7 +1484,8 @@ window.onload = function() {
 	$("#test").click(function() {
 		var code = '';
 		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-			code = code + editors[i].getValue() + '\n';
+			// code = code + editors[i].getValue() + '\n';
+			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n';
 		}
 		$("#console").empty();
 		try {
@@ -1728,18 +1722,12 @@ window.onload = function() {
 	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 		editors[i].refresh();
 	}
-	// editor.refresh();
-	// editor2.refresh();
-	// editor3.refresh();
 
 	$(window).resize(function() {
 		resizeWindow();
 		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 			editors[i].refresh();
 		}
-		// editor.refresh();
-		// editor2.refresh();
-		// editor3.refresh();
 	});
 
 	$('#expandSidebarIn').on('click', function() {
@@ -1777,9 +1765,6 @@ window.onload = function() {
 			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 				editors[i].refresh();
 			}
-			// editor.refresh();
-			// editor2.refresh();
-			// editor3.refresh();
 		}, 10);
 		return false;
 	});
@@ -1820,9 +1805,6 @@ window.onload = function() {
 			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 				editors[i].refresh();
 			}
-			// editor.refresh();
-			// editor2.refresh();
-			// editor3.refresh();
 		}, 10);
 		return false;
 	});

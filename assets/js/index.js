@@ -1160,7 +1160,8 @@ window.onload = function() {
 
 	)();
 
-	var tabOrder;
+	var tabOrder = ["list_1", "list_2", "list_3"];
+	console.log(tabOrder);
 	$(function() {
 		$("#sortable").sortable({
 			stop: function(event, ui) {
@@ -1273,13 +1274,22 @@ window.onload = function() {
 
 		var num_tabs = $("div#tabs ul li").length + 1;
 
+		var tab_name = document.getElementById("consoleName").value;
+
+		if (!tab_name) {
+			tab_name = "Console" + num_tabs;
+		}
+
+		var newtab = "list_" + num_tabs;
+		tabOrder.push(newtab);
+
 		$("div#tabs ul").append(
 			"<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
-			num_tabs + "'>Console" + num_tabs + "</a></li>");
+			num_tabs + "'>" + tab_name + "</a></li>");
 
 		$("div#tabs .tab-content").append(
-			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>Console " +
-			num_tabs +
+			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>" +
+			tab_name +
 			"<button id='test" + num_tabs +
 			"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
 			num_tabs + "'></textarea></div>" +
@@ -1539,7 +1549,17 @@ window.onload = function() {
 			limitOne: true
 		}, function(submissions) {
 			submissions.forEach(function(submission) {
-				editors[1].setValue(submission.code);
+				// editors[1].setValue(submission.code);
+
+				for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+					console.log("Here we are");
+					console.log(tabOrder);
+					console.log(tabOrder[i - 1]);
+					console.log(tabOrder[i - 1].charAt[1]);
+					// editor[tabOrder[i - 1].charAt(5)].setValue(submission.code.split(
+					// 	"//split here")[i - 1]);
+				}
+
 			});
 		});
 	});
@@ -1548,7 +1568,8 @@ window.onload = function() {
 		// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 		var code = '';
 		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-			code = code + editors[i].getValue() + '\n';
+			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+				"//split here";
 		}
 		$.post("/user/saveCode", {
 			code: code
@@ -1588,7 +1609,8 @@ window.onload = function() {
 
 			var code = '';
 			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-				code = code + editors[i].getValue() + '\n';
+				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+					"//split here";
 			}
 			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3
 			// 	.getValue();

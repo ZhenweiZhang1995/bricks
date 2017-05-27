@@ -1368,7 +1368,7 @@ window.onload = function() {
 		console.log("remove button clicked");
 		// var panelId = $(this).closest("li").remove().attr("aria-controls");
 		$(currentRemove).closest("li").remove()
-		tabs.tabs("refresh");
+		$("div#tabs").tabs("refresh");
 
 
 	}
@@ -1552,12 +1552,14 @@ window.onload = function() {
 				// editors[1].setValue(submission.code);
 
 				for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-					console.log("Here we are");
 					console.log(tabOrder);
-					console.log(tabOrder[i - 1]);
-					console.log(tabOrder[i - 1].charAt[1]);
-					// editor[tabOrder[i - 1].charAt(5)].setValue(submission.code.split(
-					// 	"//split here")[i - 1]);
+					console.log(submission.code);
+					var splitString = submission.code.split("//split here");
+					console.log(splitString);
+
+
+					editors[tabOrder[i - 1].substring(5, 6)].setValue(splitString[i -
+						1]);
 				}
 
 			});

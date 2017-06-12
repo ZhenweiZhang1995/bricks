@@ -1152,6 +1152,49 @@ function getPublishedCode() {
 
 window.onload = function() {
 
+
+	$("#demoTabs").tabs();
+	$("#demoTabs").tabs('option', 'active', 0)
+
+	$("#removeTabs").click(function() {
+		var tabid = getCurrent() - 1;
+		// var tabIndex = parseInt($("#indexValue").val(), 10);
+		var tab = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").remove();
+		$("#demoTabs").tabs("refresh");
+	});
+
+	var num_tabs = $("div#demoTabs ul li").length;
+
+	$("#addTabs").click(function() {
+		num_tabs++;
+
+		var tab_name = document.getElementById("tabname").value;
+
+		if (!tab_name) {
+			tab_name = "Console" + num_tabs;
+		}
+
+		$("<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
+			num_tabs + "'>" + tab_name + "</a></li>").appendTo(
+			"#demoTabs .ui-tabs-nav");
+		$("#demoTabs .tab-content").append("<div id='editor" + num_tabs +
+			"'class='tab-pane'>" + num_tabs + "</div>");
+		$("#demoTabs").tabs("refresh");
+		$("#demoTabs").tabs("option", "active", $(".ui-tabs-nav").children().size() -
+			1);
+		getCurrent();
+	});
+
+
+	function getCurrent() {
+		var id = $("#demoTabs").tabs('option', 'active') + 1;
+		currentTest = "#demoTabs " + id;
+		console.log(currentTest);
+		return id;
+	}
+
+
+
 	(function() {
 			var u = document.URL.split("/");
 			u.pop();
@@ -1164,6 +1207,7 @@ window.onload = function() {
 	console.log(tabOrder);
 	$(function() {
 		$("#sortable").sortable({
+			distance: 30,
 			stop: function(event, ui) {
 				tabOrder = $(this).sortable('toArray');
 				console.log(tabOrder);
@@ -1248,7 +1292,7 @@ window.onload = function() {
 			//save current code into user modelget
 			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 			var code = '';
-			for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 				code = code + editors[i].getValue() + '\n';
 			}
 			$.post("/user/saveCode/", {
@@ -1264,83 +1308,79 @@ window.onload = function() {
 		});
 	});
 
-	/*******
+	/**********************
 	add tab function
-	*******/
-
-	$("div#tabs").tabs();
-
-	$("button#add-tab").click(function() {
-
-		var num_tabs = $("div#tabs ul li").length + 1;
-
-		var tab_name = document.getElementById("consoleName").value;
-
-		if (!tab_name) {
-			tab_name = "Console" + num_tabs;
-		}
-
-		var newtab = "list_" + num_tabs;
-		tabOrder.push(newtab);
-
-		$("div#tabs ul").append(
-			"<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
-			num_tabs + "'>" + tab_name + "</a></li>");
-
-		$("div#tabs .tab-content").append(
-			"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>" +
-			tab_name +
-			"<button id='test" + num_tabs +
-			"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
-			num_tabs + "'></textarea></div>" +
-			"<button id='remove" + num_tabs +
-			"' type='button' class='btn btn-danger' style='width:210px;text-align:center;margin-bottom:3px;margin-top:2%'><span class='glyphicon glyphicon-remove' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Remove Current Console</button>"
-		);
-
-		var listid = "list_" + num_tabs;
-		document.getElementById(listid).addEventListener("click",
-			getCurrentTabID);
-
-		var testid = "test" + num_tabs;
-		document.getElementById(testid).addEventListener("click",
-			testCurrentConsole);
-
-		var removeid = "remove" + num_tabs;
-		document.getElementById(removeid).addEventListener("click",
-			removeCurrentConsole);
-
-		console.log(editors);
-		consolelength++;
-		editors[consolelength] = CodeMirror.fromTextArea(document.getElementById(
-			"codemirror" +
-			consolelength), {
-			mode: "javascript",
-			styleActiveLine: true,
-			lineNumbers: true,
-			lineWrapping: true,
-			theme: "mbo",
-			extraKeys: {
-				"F11": function(cm) {
-					if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
-						$(".CodeMirror").css("font-size", "150%");
-					} else {
-						$(".CodeMirror").css("font-size", "115%");
-					}
-				},
-				"Esc": function(cm) {
-					if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-					$(".CodeMirror").css("font-size", "100%");
-				}
-			}
-		});
-		$("div#tabs").tabs("refresh");
+	***********************/
 
 
-	});
+
+	// $("div#tabs").tabs();
+	//
+	// $("button#add-tab").click(function() {
+	//
+	// 	var num_tabs = $("div#tabs ul li").length + 1;
+	//
+	// 	var tab_name = document.getElementById("consoleName").value;
+	//
+	// 	if (!tab_name) {
+	// 		tab_name = "Console" + num_tabs;
+	// 	}
+	//
+	// 	var newtab = "list_" + num_tabs;
+	// 	tabOrder.push(newtab);
+	//
+	// 	$("div#tabs ul").append(
+	// 		"<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
+	// 		num_tabs + "'>" + tab_name + "</a></li>");
+	//
+	// 	$("div#tabs .tab-content").append(
+	// 		"<div id='editor" + num_tabs + "'class='tab-pane fade'><h3>" +
+	// 		tab_name +
+	// 		"<button id='test" + num_tabs +
+	// 		"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
+	// 		num_tabs + "'></textarea></div>" +
+	// 		"<div id='add'><form class='form-inline'><input type='text' class='form-control mb-2 mr-sm-2 mb-sm-0' id='consoleName' placeholder='Name of new console' style='margin-top:2%;margin-bottom:3px;margin-right:2%;'></input><button id='add-tab' class='btn btn-success' style='margin-top:2%;margin-bottom:3px;'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp Create Console</button>" +
+	// 		"<button id='removeTab' class='btn btn-danger' style='width:210px;text-align:center;margin-bottom:3px;margin-top:2%;margin-left:2%;'><span class='glyphicon glyphicon-remove' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Remove Current Console</button>"
+	// 	);
+	//
+	// 	var listid = "list_" + num_tabs;
+	// 	document.getElementById(listid).addEventListener("click",
+	// 		getCurrentTabID);
+	//
+	// 	var testid = "test" + num_tabs;
+	// 	document.getElementById(testid).addEventListener("click",
+	// 		testCurrentConsole);
+	//
+	// 	consolelength++;
+	// 	editors[consolelength] = CodeMirror.fromTextArea(document.getElementById(
+	// 		"codemirror" +
+	// 		consolelength), {
+	// 		mode: "javascript",
+	// 		styleActiveLine: true,
+	// 		lineNumbers: true,
+	// 		lineWrapping: true,
+	// 		theme: "mbo",
+	// 		extraKeys: {
+	// 			"F11": function(cm) {
+	// 				if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+	// 					$(".CodeMirror").css("font-size", "150%");
+	// 				} else {
+	// 					$(".CodeMirror").css("font-size", "115%");
+	// 				}
+	// 			},
+	// 			"Esc": function(cm) {
+	// 				if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+	// 				$(".CodeMirror").css("font-size", "100%");
+	// 			}
+	// 		}
+	// 	});
+	// 	$("div#tabs").tabs("refresh");
+	//
+	//
+	// });
 
 	function getCurrentTabID() {
-		var id = $("#tabs").tabs('option', 'active') + 1;
-		console.log(id);
+		var id = $("#demoTabs").tabs('option', 'active') + 1;
 		currentTest = "#test" + id;
 		console.log(currentTest);
 		return id;
@@ -1361,21 +1401,46 @@ window.onload = function() {
 		}
 	}
 
-	function removeCurrentConsole() {
+
+	$("button#removeTab").click(function() {
 		var currentid = getCurrentTabID();
 		var currentRemove = "#list_" + getCurrentTabID();
 		console.log(currentRemove);
 		console.log("remove button clicked");
-		// var panelId = $(this).closest("li").remove().attr("aria-controls");
-		$(currentRemove).closest("li").remove()
+
+		// var CM = document.getElementById("codemirror" + currentid);
+		// CM.CodeMirror.toTextArea();
+
+		document.getElementById("codemirror" + currentid)
+
+		// editors[i] = CodeMirror.fromTextArea(document.getElementById("codemirror" +
+		// 	i)
+
+		$(currentRemove).closest("li").remove();
+
+		var currentEditor = "#editor" + getCurrentTabID();
+		$(currentEditor).remove();
+
+		consolelength = consolelength - 1;
+
+
+		delete editors[currentid];
+
+		$("#tabs").tabs("option", "active", 1);
+
+		console.log(editors[currentid]);
 		$("div#tabs").tabs("refresh");
+		console.log("deleted");
+		console.log("currentid is" + currentid);
+
+	});
 
 
-	}
 
-
-
-	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+	for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
+		if (editors[i] === null) {
+			continue;
+		}
 		editors[i] = CodeMirror.fromTextArea(document.getElementById("codemirror" +
 			i), {
 			mode: "javascript",
@@ -1571,11 +1636,12 @@ window.onload = function() {
 		var code = '';
 		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
-				"//split here";
+				"//split here" + '\n';
 		}
 		$.post("/user/saveCode", {
 			code: code
 		}, function(user) {
+			console.log(code);
 			console.log("savecode");
 			var save = $("#save").width();
 			console.log(save);

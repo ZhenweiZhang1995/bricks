@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="lib/codemirror.css">
 <link rel="stylesheet" href="theme/mbo.css">
 <link rel="stylesheet" href="addon/display/fullscreen.css">
+<link rel="stylesheet" href="theme/tab.css">
 
 <style>
 html, body, .container-fluid, .col-md-9, #codemirror,#codemirror2,#codemirror3, .CodeMirror {
@@ -283,6 +284,9 @@ div.pds_hidden {
 <script src="/js/acorn.js"></script>
 <script src="/js/pnut.js"></script>
 <script src="/js/index.js"></script>
+
+<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <script>
 <% if (!req.isAuthenticated()) { %>
@@ -846,32 +850,57 @@ document.title="Bricks 4.0 JavaScript";
 		</div>
 
 
-    <div id="add">
-        <form class="form-inline">
-          <label class="mr-sm-2" for="inlineFormCustomSelect">Console Name: &nbsp</label>
-          <input type="text" id="consoleName" placeholder="Name of new console" style="margin-right:2%;">
-          </input>
-
-          <button id='add-tab' class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"
-             style="font-size:12pt;margin-bottom:2%;">
-          </span>&nbsp Create Console</button>
-        </form>
-    </div>
-    </br>
-
-
-    <div class="row" id= "tabs">
+    <div id="demoTabs">
         <ul id="sortable" class="nav nav-pills">
-          <li class="active" id="list_1"><a data-toggle="pill" href="#main">Main</a></li>
-          <li id="list_2"><a data-toggle="pill" href="#editor2">Console2</a></li>
-          <li id="list_3"><a data-toggle="pill" href="#editor3">Console3</a></li>
+          <li id="list_1"><a href="#main">Main</a></li>
+          <li id="list_2"><a href="#editor2">Console2</a></li>
+          <li id="list_3"><a href="#editor3">Console3</a></li>
         </ul>
-
         <div class="tab-content">
-          <div id="main" class="tab-pane fade in active">
-            <h3>Main Console
-              <button id="test1" type="button" class="btn btn-warning"
-                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%;">
+            <div id="main" class="tab-pane">
+              <h3>Main Console
+                <button id="test1" type="button" class="btn btn-warning"
+                  style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%;">
+                  <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
+                     style="font-size:12pt;">
+                  </span>
+                  &nbsp Test Current Console
+                </button>
+              </h3>
+
+              <!--CodeMirror Start-->
+              <div class="row" style="height:100%">
+                <% if (req.isAuthenticated()) { %>
+                    <textarea id="codemirror1"><%=req.user.latestCode%></textarea>
+                <%} else {%>
+                    <textarea id="codemirror1"></textarea>
+                <%}%>
+              </div>
+
+              <!--CodeMirror End-->
+          </div>
+          <div id="editor2" class="tab-pane">
+              <h3>Console 2
+                <button id="test2" type="button" class="btn btn-warning"
+                  style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
+                  <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
+                     style="font-size:12pt;">
+                  </span>
+                  &nbsp Test Current Console
+                </button>
+              </h3>
+
+              <!--CodeMirror Start-->
+              <div class="row" style="height:100%">
+                    <textarea id="codemirror2"></textarea>
+              </div>
+
+              <!--CodeMirror End-->
+          </div>
+          <div id="editor3" class="tab-pane">
+            <h3>Console 3
+              <button id="test3" type="button" class="btn btn-warning"
+                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
                 <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
                    style="font-size:12pt;">
                 </span>
@@ -881,85 +910,31 @@ document.title="Bricks 4.0 JavaScript";
 
             <!--CodeMirror Start-->
             <div class="row" style="height:100%">
-              <% if (req.isAuthenticated()) { %>
-                  <textarea id="codemirror1"><%=req.user.latestCode%></textarea>
-              <%} else {%>
-                  <textarea id="codemirror1"></textarea>
-              <%}%>
+                  <textarea id="codemirror3"></textarea>
             </div>
 
             <!--CodeMirror End-->
+          </div>
+        </div>
+      </div>
 
-            <button id="remove1" type="button" class="btn btn-danger"
-              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
+      <div id="add">
+          <form class="form-inline">
+            <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" for="tabname" id="tabname" placeholder="Name of new console" style="margin-top:2%;margin-bottom:3px;margin-right:2%;">
+            </input>
+
+            <button id='addTabs' class="btn btn-success" style="margin-top:2%;margin-bottom:3px;"><span class="glyphicon glyphicon-plus" aria-hidden="true">
+            </span>&nbsp Create Console</button>
+            <button id="removeTabs" class="btn btn-danger"
+              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;margin-left:2%;">
               <span id="accShowIcon" class="glyphicon glyphicon-remove" aria-hidden="true"
                  style="font-size:12pt;">
               </span>
               &nbsp Remove Current Console
             </button>
+          </form>
+      </div>
 
-          </div>
-
-          <div id="editor2" class="tab-pane fade">
-            <h3>Console 2
-              <button id="test2" type="button" class="btn btn-warning"
-                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
-                <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
-                   style="font-size:12pt;">
-                </span>
-                &nbsp Test Current Console
-              </button>
-            </h3>
-
-            <!--CodeMirror Start-->
-            <div class="row" style="height:100%">
-                  <textarea id="codemirror2"></textarea>
-            </div>
-
-            <!--CodeMirror End-->
-
-            <button id="remove2" type="button" class="btn btn-danger"
-              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                 style="font-size:12pt;">
-              </span>
-              &nbsp Remove Current Console
-            </button>
-
-          </div>
-
-          <div id="editor3" class="tab-pane fade">
-            <h3>Console 3
-              <button id="test3" type="button" class="btn btn-warning"
-                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
-                <span class="glyphicon glyphicon-play" aria-hidden="true"
-                   style="font-size:12pt;">
-                </span>
-                &nbsp Test Current Console
-              </button>
-            </h3>
-
-            <!--CodeMirror Start-->
-            <div class="row" style="height:100%">
-              <textarea id="codemirror3"></textarea>
-            </div>
-
-            <!--CodeMirror End-->
-
-            <button id="remove3" type="button" class="btn btn-danger"
-              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"
-                 style="font-size:12pt;">
-              </span>
-              &nbsp Remove Current Console
-            </button>
-
-          </div>
-        </div>
-
-    </div>
-
-    </br>
     <div class="row" >
       <div id="submissions" class='panel panel-default hidden'>
      	  <div class='panel-heading'>

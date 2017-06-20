@@ -730,7 +730,6 @@ function changeFontSize(size) {
 
 var editors = [];
 var editor;
-var consolelength = 3;
 
 var modalEditor;
 var requestModalEditor;
@@ -1154,13 +1153,27 @@ window.onload = function() {
 
 
 	$("#demoTabs").tabs();
-	$("#demoTabs").tabs('option', 'active', 0)
+	$("#demoTabs").tabs('option', 'active', 0);
 
 	$("#removeTabs").click(function() {
 		var tabid = getCurrent() - 1;
-		// var tabIndex = parseInt($("#indexValue").val(), 10);
 		var tab = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").remove();
 		$("#demoTabs").tabs("refresh");
+	});
+
+	$("#testTab").click(function() {
+		var tabid = getCurrent();
+		var curruentid = "#test" + getCurrent();
+		console.log(curruentid);
+		console.log("new test button clicked");
+		var code = editors[tabid].getValue();
+		$("#console").empty();
+		try {
+			eval(code);
+			$("#console").append("No error reports");
+		} catch (e) {
+			$("#console").append(e);
+		}
 	});
 
 	var num_tabs = $("div#demoTabs ul li").length;
@@ -1174,33 +1187,25 @@ window.onload = function() {
 			tab_name = "Console" + num_tabs;
 		}
 
-		$("<li id='list_" + num_tabs + "'><a data-toggle='pill' href='#editor" +
+		$("<li id='list_" + num_tabs + "'><a href='#editor" +
 			num_tabs + "'>" + tab_name + "</a></li>").appendTo(
 			"#demoTabs .ui-tabs-nav");
 
-
-		// $("#demoTabs .tab-content").append("<div id='editor" + num_tabs +
-		// 	"'class='tab-pane'>" + num_tabs + "</div>");
-
 		$("#demoTabs .tab-content").append(
-			"<div id='editor" + num_tabs + "'class='tab-pane'><h3>" +
-			tab_name +
-			"<button id='test" + num_tabs +
-			"' type='button' class='btn btn-warning' style='width:210px;text-align:center;margin-bottom:3px;margin-left:5%'><span class='glyphicon glyphicon-play' aria-hidden='true' style='font-size:12pt;'></span>&nbsp Test Current Console</button></h3> <div class='row' style='height: 100%'><textarea id='codemirror" +
+			"<div id='editor" + num_tabs +
+			"'class='tab-pane'><div class='row' style='height: 100%'><textarea id='codemirror" +
 			num_tabs + "'></textarea></div></div>"
 		);
+		console.log("new code mirror created;")
 
 		var listname = "list_" + num_tabs;
 		tabName[listname] = tab_name;
 		console.log(tabName);
 
 		var listid = "list_" + num_tabs;
-		document.getElementById(listid).addEventListener("click",
-			getCurrentTabID);
-
-		var testid = "test" + num_tabs;
-		document.getElementById(testid).addEventListener("click",
-			testCurrentConsole);
+		// document.getElementById(listid).addEventListener("click",
+		// 	getCurrentTabID);
+		tabOrder.push(listid);
 
 		editors[num_tabs] = CodeMirror.fromTextArea(document.getElementById(
 			"codemirror" +
@@ -1226,12 +1231,12 @@ window.onload = function() {
 		});
 
 
+
 		$("#demoTabs").tabs("refresh");
 		$("#demoTabs").tabs("option", "active", $(".ui-tabs-nav").children().size() -
 			1);
 		getCurrent();
 	});
-
 
 	function getCurrent() {
 		var id = $("#demoTabs").tabs('option', 'active') + 1;
@@ -1352,6 +1357,10 @@ window.onload = function() {
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+				if (editors[tabOrder[i - 1]] === null) {
+					continue;
+				}
+
 			}
 			$.post("/user/saveCode/", {
 				code: code
@@ -1360,7 +1369,8 @@ window.onload = function() {
 		120000 /* 120000ms = 2 min*/
 	);
 	$("#folderAccordion").empty();
-	$.post("/folder/read/", {}, function(folders) {
+	$.post("/folder/read/", {}, function(
+		folders) {
 		folders.forEach(function(folder) {
 			addFolder(folder);
 		});
@@ -1524,42 +1534,6 @@ window.onload = function() {
 		}
 	});
 
-	$("#test1").click(function() {
-		var code = editors[1].getValue();
-		$("#console").empty();
-		try {
-			eval(code);
-			$("#console").append("No error reports");
-		} catch (e) {
-			//alert(e);
-			$("#console").append(e);
-		}
-	});
-
-	$("#test2").click(function() {
-		var code = editors[2].getValue();
-		$("#console").empty();
-		try {
-			eval(code);
-			$("#console").append("No error reports");
-		} catch (e) {
-			//alert(e);
-			$("#console").append(e);
-		}
-	});
-
-	$("#test3").click(function() {
-		var code = editors[3].getValue();
-		$("#console").empty();
-		try {
-			eval(code);
-			$("#console").append("No error reports");
-		} catch (e) {
-			//alert(e);
-			$("#console").append(e);
-		}
-	});
-
 	$("#reload").click(function() {
 		$.post("/submission/read/" + curProblem.id, {
 			currentUser: true,
@@ -1584,32 +1558,62 @@ window.onload = function() {
 				console.log(contents);
 				console.log(names);
 
+				$('#sortable').empty();
+				$("#demoTabs .tab-content").empty();
+				// tabOrder = [];
+				tabName = {};
+				editors = [];
+				num_tabs = contents.length;
+				console.log(num_tabs);
 				for (var i = 1; i < contents.length + 1; i++) {
-					if (i < 4) {
-						editors[i].setValue(contents[i - 1]);
-						var that = this;
-						setTimeout(function() {
-							that.editors[i].refresh();
-						}, 10);
-						// tab already exists
-					} else {
-						//create new tab
-					}
+					$("<li id='list_" + i + "'><a href='#editor" +
+						i + "'>" + names[i - 1] + "</a></li>").appendTo(
+						"#demoTabs .ui-tabs-nav");
+					$("#demoTabs .tab-content").append(
+						"<div id='editor" + i +
+						"'class='tab-pane'><div class='row' style='height: 100%'><textarea id='codemirror" +
+						i + "'>" + contents[i - 1] + "</textarea></div></div>"
+					);
+					console.log("console has been auto reloaded");
 
-					// tabName.indexof() != -1
-					// editors[tabOrder[i - 1].substring(5, 6)].setValue(splitString[i -
-					// 	1]);
+					var listname = "list_" + i;
+					tabName[listname] = names[i - 1];
+
+					editors[i] = CodeMirror.fromTextArea(document.getElementById(
+						"codemirror" +
+						i), {
+						mode: "javascript",
+						styleActiveLine: true,
+						lineNumbers: true,
+						lineWrapping: true,
+						theme: "mbo",
+						extraKeys: {
+							"F11": function(cm) {
+								if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+									$(".CodeMirror").css("font-size", "150%");
+								} else {
+									$(".CodeMirror").css("font-size", "115%");
+								}
+							},
+							"Esc": function(cm) {
+								if (cm.getOption("fullScreen")) cm.setOption("fullScreen",
+									false);
+								$(".CodeMirror").css("font-size", "100%");
+							}
+						}
+					});
+					console.log(editors);
 				}
-
+				$("#demoTabs").tabs("refresh");
+				$("#demoTabs").tabs("option", "active", 0);
 			});
 		});
 	});
 
 	$("#save").click(function() {
-		// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
-
 		var code = '';
 		console.log(editors);
+		console.log(tabOrder);
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
 				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
@@ -1656,8 +1660,7 @@ window.onload = function() {
 				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 			}
-			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3
-			// 	.getValue();
+
 			try {
 				if (curProblem.language == "javascript") {
 					var AST = acorn.parse(code); // return an abstract syntax tree structure

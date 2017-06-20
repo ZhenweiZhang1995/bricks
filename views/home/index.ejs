@@ -273,6 +273,11 @@ div.pds_hidden {
   height: 100%;
 }
 
+.nav{
+  width:80%;
+  overflow-x: auto;
+}
+
 
 </style>
 
@@ -289,6 +294,9 @@ div.pds_hidden {
 <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <script>
+
+
+
 <% if (!req.isAuthenticated()) { %>
    <% res.redirect("/login"); %>
     var loggedIn = false;
@@ -852,26 +860,33 @@ document.title="Bricks 4.0 JavaScript";
 
     <div id="demoTabs">
         <ul id="sortable" class="nav nav-pills">
-          <li id="list_1"><a href="#main">Main</a></li>
-          <li id="list_2"><a href="#editor2">Console2</a></li>
-          <li id="list_3"><a href="#editor3">Console3</a></li>
+          <li id="list_1"><a href="#main"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[1]%></a></li>
+          <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]%></a></li>
+          <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]%></a></li>
+
+          <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
+            <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]%></a></li>
+          <% } %>
+          <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
+            <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]%></a></li>
+          <% } %>
+
         </ul>
+        <div class = "testsection" style = "margin-top:10px;">
+          <button id="testTab" type="button" class="btn btn-warning"
+            style="width:210px;height:40px;text-align:center;margin-top:-58px;margin-right20px;float:right;">
+            <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
+               style="font-size:12pt;">
+            </span>
+            &nbsp Test Current Console
+          </button>
+        </div>
         <div class="tab-content">
             <div id="main" class="tab-pane">
-              <h3>Main Console
-                <button id="test1" type="button" class="btn btn-warning"
-                  style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%;">
-                  <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
-                     style="font-size:12pt;">
-                  </span>
-                  &nbsp Test Current Console
-                </button>
-              </h3>
-
               <!--CodeMirror Start-->
               <div class="row" style="height:100%">
                 <% if (req.isAuthenticated()) { %>
-                    <textarea id="codemirror1"><%=req.user.latestCode%></textarea>
+                    <textarea id="codemirror1"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[0]%></textarea>
                 <%} else {%>
                     <textarea id="codemirror1"></textarea>
                 <%}%>
@@ -879,42 +894,44 @@ document.title="Bricks 4.0 JavaScript";
 
               <!--CodeMirror End-->
           </div>
-          <div id="editor2" class="tab-pane">
-              <h3>Console 2
-                <button id="test2" type="button" class="btn btn-warning"
-                  style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
-                  <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
-                     style="font-size:12pt;">
-                  </span>
-                  &nbsp Test Current Console
-                </button>
-              </h3>
 
+          <div id="editor2" class="tab-pane">
               <!--CodeMirror Start-->
               <div class="row" style="height:100%">
-                    <textarea id="codemirror2"></textarea>
+                    <textarea id="codemirror2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[2]%></textarea>
               </div>
 
               <!--CodeMirror End-->
           </div>
+
           <div id="editor3" class="tab-pane">
-            <h3>Console 3
-              <button id="test3" type="button" class="btn btn-warning"
-                style="width:210px;text-align:center;margin-bottom:3px;margin-left:5%">
-                <span id="accShowIcon" class="glyphicon glyphicon-play" aria-hidden="true"
-                   style="font-size:12pt;">
-                </span>
-                &nbsp Test Current Console
-              </button>
-            </h3>
 
             <!--CodeMirror Start-->
             <div class="row" style="height:100%">
-                  <textarea id="codemirror3"></textarea>
+                  <textarea id="codemirror3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[4]%></textarea>
             </div>
 
             <!--CodeMirror End-->
           </div>
+
+          <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
+
+            <div id="editor4" class="tab-pane">
+              <div class="row" style="height:100%">
+                    <textarea id="codemirror4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[6]%></textarea>
+              </div>
+            </div>
+          <% } %>
+
+          <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
+
+            <div id="editor4" class="tab-pane">
+              <div class="row" style="height:100%">
+                    <textarea id="codemirror5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[8]%></textarea>
+              </div>
+            </div>
+          <% } %>
+
         </div>
       </div>
 
@@ -934,6 +951,7 @@ document.title="Bricks 4.0 JavaScript";
             </button>
           </form>
       </div>
+      </br>
 
     <div class="row" >
       <div id="submissions" class='panel panel-default hidden'>

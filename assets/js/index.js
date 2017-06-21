@@ -1099,8 +1099,13 @@ function publishCode() {
 	// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 
 	var code = '';
-	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
-		code = code + editors[i].getValue() + '\n';
+
+	for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
+		code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+			"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+		if (editors[tabOrder[i - 1]] === null) {
+			continue;
+		}
 	}
 
 	$.post("/share/publish/", {
@@ -1155,9 +1160,33 @@ window.onload = function() {
 	$("#demoTabs").tabs();
 	$("#demoTabs").tabs('option', 'active', 0);
 
+	$('.CodeMirror').each(function(i, el){
+    	el.CodeMirror.refresh();
+	});
+
+	document.getElementById("sortable").addEventListener("click",
+	function(){
+		$('.CodeMirror').each(function(i, el){
+    		el.CodeMirror.refresh();
+		});
+		console.log("refreshed");
+	});
+
 	$("#removeTabs").click(function() {
 		var tabid = getCurrent() - 1;
 		var tab = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").remove();
+
+		var list = "list_" + getCurrent();
+		var listid = "#list_" + getCurrent();
+		var index1 = tabOrder.indexOf(list);
+		tabOrder.splice(index1, 1);
+
+		delete tabName[list];
+
+		console.log(list+ " has been deleted.");
+		console.log(tabOrder);
+		console.log(tabName);
+
 		$("#demoTabs").tabs("refresh");
 	});
 
@@ -1196,16 +1225,17 @@ window.onload = function() {
 			"'class='tab-pane'><div class='row' style='height: 100%'><textarea id='codemirror" +
 			num_tabs + "'></textarea></div></div>"
 		);
-		console.log("new code mirror created;")
+		console.log("new code mirror created;");
+		// console.log(tab_name);
 
 		var listname = "list_" + num_tabs;
 		tabName[listname] = tab_name;
 		console.log(tabName);
 
 		var listid = "list_" + num_tabs;
-		// document.getElementById(listid).addEventListener("click",
-		// 	getCurrentTabID);
+
 		tabOrder.push(listid);
+		console.log(tabOrder);
 
 		editors[num_tabs] = CodeMirror.fromTextArea(document.getElementById(
 			"codemirror" +
@@ -1241,7 +1271,6 @@ window.onload = function() {
 	function getCurrent() {
 		var id = $("#demoTabs").tabs('option', 'active') + 1;
 		currentTest = "#demoTabs " + id;
-		console.log(currentTest);
 		return id;
 	}
 
@@ -1255,11 +1284,15 @@ window.onload = function() {
 
 	)();
 
-	var tabOrder = ["list_1", "list_2", "list_3"];
+
+	var tabOrder = [];
 	var tabName = {};
-	tabName['list_1'] = "main";
-	tabName['list_2'] = "Console2";
-	tabName['list_3'] = "Console3";
+	for (var i = 1; i < num_tabs + 1; i++) {
+		var list = "list_" + i;
+		var listid = "#list_" + i;
+		tabOrder.push(list);
+		tabName[list] = $(listid).text();
+	}
 
 	console.log(tabOrder);
 	$(function() {
@@ -1348,11 +1381,7 @@ window.onload = function() {
 	setInterval(
 		function() {
 			//save current code into user modelget
-			// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 			var code = '';
-			// for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-			// 	code = code + editors[i].getValue() + '\n';
-			// }
 
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
@@ -1520,6 +1549,7 @@ window.onload = function() {
 
 	$("#test").click(function() {
 		var code = '';
+		console.log(tabOrder);
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			// code = code + editors[i].getValue() + '\n';
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n';
@@ -1788,13 +1818,13 @@ window.onload = function() {
 	});
 
 	resizeWindow();
-	for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+	for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 		editors[i].refresh();
 	}
 
 	$(window).resize(function() {
 		resizeWindow();
-		for (var i = 1; i < $("div#tabs ul li").length + 1; i++) {
+		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			editors[i].refresh();
 		}
 	});

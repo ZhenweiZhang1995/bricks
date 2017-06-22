@@ -1090,33 +1090,6 @@ function makeFullBar() {
 
 }
 
-function publishCode() {
-	if ($("#pubCodeIcon").hasClass('glyphicon-share')) {
-		$("#pubCodeIcon").removeClass('glyphicon-share');
-	}
-	$("#pubCodeIcon").addClass('glyphicon-ban-circle');
-
-	// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
-
-	var code = '';
-
-	for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-		code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
-			"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
-		if (editors[tabOrder[i - 1]] === null) {
-			continue;
-		}
-	}
-
-	$.post("/share/publish/", {
-			donorname: "_SUPER_USER__",
-			code: code
-		},
-		function(share) {
-			console.log("publish code");
-		}
-	);
-}
 
 function unpublishCode() {
 	if ($("#pubCodeIcon").hasClass('glyphicon-ban-circle')) {
@@ -1141,7 +1114,71 @@ function getPublishedCode() {
 			console.log("get published code");
 			var txt = share.code;
 			if (!(txt == null)) {
-				editors[1].setValue(txt);
+				var splitString = txt.split(/\/\/\s\/\*\/|\?end\?/);
+				console.log(splitString);
+
+			// name array for name of consoles and content array for content in consoles
+			var names = [];
+			var contents = [];
+			for (var p = 0; p < splitString.length - 1; p++) {
+				contents.push(splitString[p]);
+				names.push(splitString[p + 1]);
+				p++;
+			}
+			console.log(contents);
+			console.log(names);
+
+			$('#sortable').empty();
+			$("#demoTabs .tab-content").empty();
+				var tabName = {};
+				var editors = [];
+				var num_tabs = contents.length;
+				console.log(num_tabs);
+				for (var i = 1; i < contents.length + 1; i++) {
+					$("<li id='list_" + i + "'><a href='#editor" +
+						i + "'>" + names[i - 1] + "</a></li>").appendTo(
+						"#demoTabs .ui-tabs-nav");
+					$("#demoTabs .tab-content").append(
+						"<div id='editor" + i +
+						"'class='tab-pane'><div class='row' style='height: 100%'><textarea id='codemirror" +
+						i + "'>" + contents[i - 1] + "</textarea></div></div>"
+					);
+					console.log("console has been auto reloaded");
+
+					var listname = "list_" + i;
+					tabName[listname] = names[i - 1];
+
+					editors[i] = CodeMirror.fromTextArea(document.getElementById(
+						"codemirror" +
+						i), {
+						mode: "javascript",
+						styleActiveLine: true,
+						lineNumbers: true,
+						lineWrapping: true,
+						theme: "mbo",
+						extraKeys: {
+							"F11": function(cm) {
+								if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+									$(".CodeMirror").css("font-size", "150%");
+								} else {
+									$(".CodeMirror").css("font-size", "115%");
+								}
+							},
+							"Esc": function(cm) {
+								if (cm.getOption("fullScreen")) cm.setOption("fullScreen",
+									false);
+								$(".CodeMirror").css("font-size", "100%");
+							}
+						}
+					});
+					console.log(editors);
+				}
+				$("#demoTabs").tabs("refresh");
+				$("#demoTabs").tabs("option", "active", 0);
+				$('.CodeMirror').each(function(i, el){
+    				el.CodeMirror.refresh();
+				});
+
 				setConsoleResultMessage(
 					"Published code is now in the main editor window\n "
 				)
@@ -1260,12 +1297,9 @@ window.onload = function() {
 			}
 		});
 
-
-
 		$("#demoTabs").tabs("refresh");
 		$("#demoTabs").tabs("option", "active", $(".ui-tabs-nav").children().size() -
 			1);
-		getCurrent();
 	});
 
 	function getCurrent() {
@@ -1384,7 +1418,7 @@ window.onload = function() {
 			var code = '';
 
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+				code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 				if (editors[tabOrder[i - 1]] === null) {
 					continue;
@@ -1636,6 +1670,9 @@ window.onload = function() {
 				}
 				$("#demoTabs").tabs("refresh");
 				$("#demoTabs").tabs("option", "active", 0);
+				$('.CodeMirror').each(function(i, el){
+    				el.CodeMirror.refresh();
+				});
 			});
 		});
 	});
@@ -1645,7 +1682,7 @@ window.onload = function() {
 		console.log(editors);
 		console.log(tabOrder);
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
 				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 		}
 		console.log(code);
@@ -1687,7 +1724,7 @@ window.onload = function() {
 
 			var code = '';
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n' +
+				code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 			}
 
@@ -1811,6 +1848,35 @@ window.onload = function() {
 		}
 		return false;
 	});
+
+	function publishCode() {
+	if ($("#pubCodeIcon").hasClass('glyphicon-share')) {
+		$("#pubCodeIcon").removeClass('glyphicon-share');
+	}
+	$("#pubCodeIcon").addClass('glyphicon-ban-circle');
+
+	// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+
+		var code = '';
+
+		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
+			code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
+				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+			if (editors[tabOrder[i - 1]] === null) {
+				continue;
+			}
+		}
+
+		$.post("/share/publish/", {
+				donorname: "_SUPER_USER__",
+				code: code
+			},
+			function(share) {
+				console.log("publish code");
+				console.log(code);
+			}
+		);
+	}
 
 	$('#getPubCode').on('click', function() {
 		getPublishedCode();

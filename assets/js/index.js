@@ -1328,7 +1328,9 @@ window.onload = function() {
 		tabName[list] = $(listid).text();
 	}
 
+
 	console.log(tabOrder);
+	// dragable tabs
 	$(function() {
 		$("#sortable").sortable({
 			distance: 30,

@@ -168,7 +168,7 @@ body {
   font-weight:bold;
 }
 .folderButtonStyle:hover {
-  background:powderblue; 
+  background:powderblue;
 }
 
 form > button {
@@ -188,8 +188,8 @@ form > button {
 		margin-bottom: 0;
 }
 .pointbreakdown {
-	float:right; 
-	width:200px; 
+	float:right;
+	width:200px;
 	margin-left:5px;
 	padding:5px;
 }
@@ -220,6 +220,10 @@ width:31.5%;
 }
 .style-submission {
 	margin-right:23.5%
+}
+.scrollableAccordian {
+ 	 height:964px;
+   overflow: scroll;
 }
 
 ul {
@@ -272,12 +276,12 @@ ul {
 }
 
 .probStudentSubmissionTableTD {
-	width: 15%;	
+	width: 15%;
 	text-align: center;
 }
 #pointbreakdownSubmission {
 	border: 2px solid gray;
-	width:190px; 
+	width:190px;
 	margin-left:5px;
 	padding:8px;
 	margin-bottom: 7px;
@@ -324,7 +328,7 @@ ul {
   <div class="container-fluid">
 
 	  <div class="navbar-header">
-	    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" 
+	    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
               data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 	      <span class="sr-only">Toggle navigation</span>
 	      <span class="icon-bar"></span>
@@ -370,14 +374,14 @@ ul {
 			</div>
 	  </div>
 
-		
+
 	</div><!-- /.container-fluid -->
 </nav>
 
 <!-- Modal -->
 	<div class="modal fade" id="shareSubmissionModal" role="dialog">
 	    <div class="modal-dialog">
-	    
+
 	      <!-- Modal content-->
 	      <div class="modal-content">
 	        <div class="modal-header">
@@ -394,14 +398,14 @@ ul {
 	          <button type="button" class="btn btn-default" data-dismiss="modal">Hold</button>
 	        </div>
 	      </div>
-	      
+
 	    </div>
 	</div>
 
 
 <div class="container-fluid " style="padding-top: 4px">
 
-	
+
 
 
 
@@ -416,9 +420,9 @@ ul {
 			<div class=" navigationPanel panel panel-default col-md-3 ">
 				<div id="moveMatrix">
 					<div id="moveMe">
-						<button type="button" class="btn btn-default folderButtonStyle" 
+						<button type="button" class="btn btn-default folderButtonStyle"
               id="sortFolderButton" >Edit Folders</button>
-						<div class="panel-group" id="navigableFolders"></div>
+						<div class="panel-group scrollableAccordian" id="navigableFolders"></div>
 						<div class="panel-group" id="sortableFolders"></div>
 					</div>
 				</div>
@@ -436,8 +440,8 @@ ul {
 					<!-- DISPLAY QUESTION HEADING -->
 					<div class="panel-heading">
 					  <h4 class="panel-title" >
-						  <a data-toggle="collapse" data-parent="#accordion" aria-expanded="true" 
-                 href="#displayQuestionCollapse" id="problemDisplayName"> 
+						  <a data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
+                 href="#displayQuestionCollapse" id="problemDisplayName">
                   <font size=+1 color=blue><b>Choose a Problem</b></font></a>
 						</h4>
 					</div>
@@ -551,7 +555,7 @@ ul {
 					<!-- EDIT QUESTION HEADING -->
 					<div class="panel-heading">
 						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" 
+							<a data-toggle="collapse" data-parent="#accordion"
                  href="#editQuestionCollapse" aria-expanded="true" >
                  <font color=blue size=+1><b>Edit existing Problem</b></font></a>
 						</h4>
@@ -621,7 +625,7 @@ ul {
 										<div class="col-md-6">
 											<label name="editFolder" class="control-label" for="folder">Folder</label>
 											<select id="editFolderDropdown" class="form-control">  </select>
-										</div> 
+										</div>
 									</div>
 
 									<div class="form-group">
@@ -637,7 +641,7 @@ ul {
 								<label class="control-label" for="editDescription">Description</label>
 								<textarea name="editDescription" id="editDescription" class="form-control"></textarea>
 								<label class="control-label" for="editOnSubmit">Function to run on submission</label>
-								<textarea name="editOnSubmit" id="editOnSubmit" class="form-control" 
+								<textarea name="editOnSubmit" id="editOnSubmit" class="form-control"
 										 style="font-family:Consolas, monospace"></textarea>
 								<div id="editProblemError"></div>
 
@@ -756,7 +760,7 @@ ul {
 								<div class="form-group">
 									<div class="col-md-12">
 										<label class="control-label" for="onSubmit">Function to run on submission</label>
-										<textarea id="onSubmit" class="form-control" 
+										<textarea id="onSubmit" class="form-control"
 											 style="font-family:Consolas, monospace">
 										</textarea>
 									</div>
@@ -770,13 +774,13 @@ ul {
 			</div>
 		</div>
 		<!-- ADD QUESTION SECTION ENDS -->
-		
+
 		<!-- SUBMISSION SECTION -->
 		<div class="tab-pane" id="submission">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#submissionCollapse" 
+						<a data-toggle="collapse" data-parent="#accordion" href="#submissionCollapse"
                id="submissionTitle">
 							Collapsible
 						</a>
@@ -785,7 +789,7 @@ ul {
 				<div id="submissionCollapse" class="panel-collapse collapse in submissionCollapse">
 					<div class="panel-body">
 						<div id="pointbreakdownSubmission">
-			  		  Functionality 
+			  		  Functionality
 			  			<a id="editSubmissionPtsF" class="pull-right" >
       					<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 							</a>
@@ -796,7 +800,7 @@ ul {
 
 
 			  				<br />
-			  				Style 
+			  				Style
 			  				<a id="editSubmissionPtsS" class="pull-right" >
       							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 							</a><span id="SstyleCheck" class="pull-right"></span><span class="badge pull-right"><span id="SearnedPtStyle">0</span>/<span id="SavailablePtStyle"></span><span><br />
@@ -808,7 +812,7 @@ ul {
 
 					</div>
 				</div>
-			</div>		
+			</div>
 			<div class="row">
 				<div class="col-sm-6" style="padding-right:0px;">
 
@@ -838,7 +842,7 @@ ul {
 							<textarea name="fbCodemirror" id="fbCodemirror"></textarea>
 
 							<textarea name="fbResponseMessage" id="fbResponseMessage" class="form-control" placeholder="Enter message for student here..."></textarea>
-							
+
 							<button id="submitFeedbackButton" class="btn btn-primary form-control" >Submit Feedback</button>
 						</div>
 				    </div>
@@ -854,7 +858,7 @@ ul {
 						<textarea id="fbCodemirrorReadOnly"></textarea>
 
 				    </div>
-				  </div>						
+				  </div>
 				</div>
 				<div class="col-sm-6">
 					<div class="panel panel-default">
@@ -872,14 +876,14 @@ ul {
 							<tbody id="relatedSubmissions"> </tbody>
 							</table>
 						</div>
-					</div>	
-				</div>			
+					</div>
+				</div>
 			</div>
 
 		</div>
 		<!-- SUBMISSION SECTION ENDS -->
 
-		<!-- PROGRESS SECTION 
+		<!-- PROGRESS SECTION
 		<div class="tab-pane" id="progress">
 			<h1>Progress</h1>
 			<div id="visualization"></div>
@@ -892,7 +896,7 @@ ul {
 				<div class="panel panel-default ">
 					<div class="panel-heading">
             <font size=+1 color=blue><b>Manage admins</b></font></div>
-	 
+
 					 <ul id="admins" class="list-group"></ul>
 
 					 <div class="panel-body">
@@ -928,7 +932,7 @@ ul {
 						</form>
 					</h4>
 				</div>
-				
+
 				<div id="viewStudentsList">
 					<div class="panel-body">
 						Loading students...
@@ -1038,10 +1042,10 @@ var soln_outputs = [ ["Hello world !!"] ];
 function totalChecker (err, user_outputs, truVec ) {
   var ff = false;
 
-  // check functional correctness  
-  if (err) { fail.f("There was an error is your code: " + err.msg); } 
+  // check functional correctness
+  if (err) { fail.f("There was an error is your code: " + err.msg); }
   else {
-     for(var i=0; i&lt;truVec.length; i++) { 
+     for(var i=0; i&lt;truVec.length; i++) {
         if (!truVec[i]) { fail.f("incorrect output"); ff = true; }
      }
   }
@@ -1057,7 +1061,7 @@ function totalChecker (err, user_outputs, truVec ) {
 }
 
 // make it so
-batch.exec ( code, soln_inputs, soln_outputs, totalChecker);			
+batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
 			</pre>
 
 
@@ -1089,11 +1093,11 @@ batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
 
 			<div id="fbDashBody" class="hidden col-md-7">
 				<div id="instructions" class='panel panel-default' style="margin-bottom:3px">
-		      		<div class='panel-heading'> 
+		      		<div class='panel-heading'>
 						<h3 class='panel-title'><a data-toggle="collapse" data-parent="#accordion" href="#feedbackCollapse" aria-expanded="true" ><span id="desc-title">Problem</span></a></h3>
 		      		</div>
 		      		<div id="feedbackCollapse" class="collapse">
-						<div class='panel-body'> 
+						<div class='panel-body'>
 			  				<div id="desc-body" >
 		 						Description
 							</div>
@@ -1111,10 +1115,10 @@ batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
 			        </div>
 					<textarea id="fbDashConsole" class="textConsole" readonly>
 			    	</textarea>
-			   
+
 					<textarea id="fbDashCodemirror"></textarea>
 					<textarea name="fbResponseMessage" id="fbResponseMessageDash" class="form-control" placeholder="Enter message for student here..."></textarea>
-					
+
 					<button id="submitFeedbackButtonDash" class="btn btn-primary form-control" >Submit Feedback</button>
 				</div>
 			</div>
@@ -1139,11 +1143,11 @@ batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
 
 			<div id="fbDashBodyC" class="hidden col-md-7">
 				<div class='panel panel-default ' style="margin-bottom:3px">
-		      		<div class='panel-heading'> 
+		      		<div class='panel-heading'>
 						<h3 class='panel-title'><a data-toggle="collapse" data-parent="#accordion" href="#completedFeedbackCollapse" aria-expanded="true" ><span id="desc-titleC">Problem</span></a></h3>
 		      		</div>
 		      		<div id="completedFeedbackCollapse" class="collapse">
-						<div class='panel-body'> 
+						<div class='panel-body'>
 			  				<div id="desc-bodyC" >
 		 						Description
 							</div>
@@ -1171,7 +1175,7 @@ batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
 
 
 		</div>
-		<!-- COMPLETED FEEDBACK SECTION ENDS -->		
+		<!-- COMPLETED FEEDBACK SECTION ENDS -->
 
 	</div>
 	<!-- BODY ENDS -->
@@ -1193,4 +1197,3 @@ batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
  <p>You must be an admin to view this page</p>
 <%}%>
 </div>
-

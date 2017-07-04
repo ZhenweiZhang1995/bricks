@@ -3,6 +3,9 @@ var unseenFeedback = null;
 var pretendStudent = false;
 var miniBar = true;
 var codeIsPub = false;
+var tabOrder = [];
+var tabName = {};
+var editors = [];
 
 function isNull(item) {
 	if (item == null || item == "null" || item == "" || item == '') {
@@ -458,7 +461,76 @@ function fillReloadModal(submission) {
 
 	$("#loadSubmission").unbind('click');
 	$("#loadSubmission").click(function() {
-		editors[1].setValue(submission.code);
+		// console.log(tabOrder);
+		// parse the code from submit
+		var splitString = submission.code.split(/\/\/\s\/\*\/|\?end\?/);
+		console.log(splitString);
+
+		// name array for name of consoles and content array for content in consoles
+		var names = [];
+		var contents = [];
+		for (var p = 0; p < splitString.length - 1; p++) {
+			contents.push(splitString[p]);
+			names.push(splitString[p + 1]);
+			p++;
+		}
+		console.log(contents);
+		console.log(names);
+
+		$('#sortable').empty();
+		$("#demoTabs .tab-content").empty();
+
+
+
+		// var tabOrder = [];
+		// var tabName = {};
+		// var editors = [];
+		var num_tabs = contents.length;
+		for (var i = 1; i < contents.length + 1; i++) {
+			$("<li id='list_" + i + "'><a href='#editor" +
+				i + "'>" + names[i - 1] + "</a></li>").appendTo(
+				"#demoTabs .ui-tabs-nav");
+			$("#demoTabs .tab-content").append(
+				"<div id='editor" + i +
+				"'class='tab-pane'><div class='row' style='height: 100%'><textarea id='codemirror" +
+				i + "'>" + contents[i - 1] + "</textarea></div></div>"
+			);
+			// console.log("console has been auto reloaded");
+
+			var listname = "list_" + i;
+			tabOrder.push(listname);
+			tabName[listname] = names[i - 1];
+
+			editors[i] = CodeMirror.fromTextArea(document.getElementById(
+				"codemirror" +
+				i), {
+				mode: "javascript",
+				styleActiveLine: true,
+				lineNumbers: true,
+				lineWrapping: true,
+				theme: "mbo",
+				extraKeys: {
+					"F11": function(cm) {
+						if (cm.setOption("fullScreen", !cm.getOption("fullScreen"))) {
+							$(".CodeMirror").css("font-size", "150%");
+						} else {
+							$(".CodeMirror").css("font-size", "115%");
+						}
+					},
+					"Esc": function(cm) {
+						if (cm.getOption("fullScreen")) cm.setOption("fullScreen",
+							false);
+						$(".CodeMirror").css("font-size", "100%");
+					}
+				}
+			});
+		}
+		console.log(tabOrder);
+		$("#demoTabs").tabs("refresh");
+		$("#demoTabs").tabs("option", "active", 0);
+		$('.CodeMirror').each(function(i, el) {
+			el.CodeMirror.refresh();
+		});
 	});
 }
 
@@ -1117,19 +1189,19 @@ function getPublishedCode() {
 				var splitString = txt.split(/\/\/\s\/\*\/|\?end\?/);
 				console.log(splitString);
 
-			// name array for name of consoles and content array for content in consoles
-			var names = [];
-			var contents = [];
-			for (var p = 0; p < splitString.length - 1; p++) {
-				contents.push(splitString[p]);
-				names.push(splitString[p + 1]);
-				p++;
-			}
-			console.log(contents);
-			console.log(names);
+				// name array for name of consoles and content array for content in consoles
+				var names = [];
+				var contents = [];
+				for (var p = 0; p < splitString.length - 1; p++) {
+					contents.push(splitString[p]);
+					names.push(splitString[p + 1]);
+					p++;
+				}
+				console.log(contents);
+				console.log(names);
 
-			$('#sortable').empty();
-			$("#demoTabs .tab-content").empty();
+				$('#sortable').empty();
+				$("#demoTabs .tab-content").empty();
 				var tabName = {};
 				var editors = [];
 				var num_tabs = contents.length;
@@ -1175,8 +1247,8 @@ function getPublishedCode() {
 				}
 				$("#demoTabs").tabs("refresh");
 				$("#demoTabs").tabs("option", "active", 0);
-				$('.CodeMirror').each(function(i, el){
-    				el.CodeMirror.refresh();
+				$('.CodeMirror').each(function(i, el) {
+					el.CodeMirror.refresh();
 				});
 
 				setConsoleResultMessage(
@@ -1197,30 +1269,43 @@ window.onload = function() {
 	$("#demoTabs").tabs();
 	$("#demoTabs").tabs('option', 'active', 0);
 
-	$('.CodeMirror').each(function(i, el){
-    	el.CodeMirror.refresh();
+	$('.CodeMirror').each(function(i, el) {
+		el.CodeMirror.refresh();
 	});
 
 	document.getElementById("sortable").addEventListener("click",
-	function(){
-		$('.CodeMirror').each(function(i, el){
-    		el.CodeMirror.refresh();
+		function() {
+			$('.CodeMirror').each(function(i, el) {
+				el.CodeMirror.refresh();
+			});
+			console.log("refreshed");
 		});
-		console.log("refreshed");
-	});
+
+	document.getElementById("folderAccordion").addEventListener("click",
+		function() {
+			$('.CodeMirror').each(function(i, el) {
+				el.CodeMirror.refresh();
+			});
+			console.log("refreshed");
+		});
 
 	$("#removeTabs").click(function() {
 		var tabid = getCurrent() - 1;
+		var list = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").attr(
+			'id');
 		var tab = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").remove();
 
-		var list = "list_" + getCurrent();
+		// var list = "list_" + getCurrent();
 		var listid = "#list_" + getCurrent();
 		var index1 = tabOrder.indexOf(list);
 		tabOrder.splice(index1, 1);
 
 		delete tabName[list];
 
-		console.log(list+ " has been deleted.");
+
+		// var tab_name = document.getElementById("tabname").value;
+		// console.log(list1);
+		console.log(list + " has been deleted.");
 		console.log(tabOrder);
 		console.log(tabName);
 
@@ -1228,11 +1313,17 @@ window.onload = function() {
 	});
 
 	$("#testTab").click(function() {
-		var tabid = getCurrent();
-		var curruentid = "#test" + getCurrent();
-		console.log(curruentid);
-		console.log("new test button clicked");
-		var code = editors[tabid].getValue();
+		var tabid = getCurrent() - 1;
+		var currentid = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").attr(
+			'id').charAt(5);
+		var currentTest = "#test" + currentid;
+
+		console.log(tabid);
+		console.log(currentid);
+		console.log(currentTest);
+		console.log("test button clicked");
+		console.log(editors);
+		var code = editors[currentid].getValue();
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1319,7 +1410,7 @@ window.onload = function() {
 	)();
 
 
-	var tabOrder = [];
+	// var tabOrder = [];
 	var tabName = {};
 	for (var i = 1; i < num_tabs + 1; i++) {
 		var list = "list_" + i;
@@ -1420,7 +1511,7 @@ window.onload = function() {
 			var code = '';
 
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-				code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
+				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 				if (editors[tabOrder[i - 1]] === null) {
 					continue;
@@ -1441,16 +1532,15 @@ window.onload = function() {
 		});
 	});
 
-	function getCurrentTabID() {
-		var id = $("#demoTabs").tabs('option', 'active') + 1;
-		currentTest = "#test" + id;
-		console.log(currentTest);
-		return id;
-	}
 
 	function testCurrentConsole() {
-		var currentid = getCurrentTabID();
-		var currentTest = "#test" + getCurrentTabID();
+
+		var tabid = getCurrent() - 1;
+		var currentid = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").attr(
+			'id');
+		var currentTest = "#test" + currentid;
+
+
 		console.log(currentTest);
 		console.log("test button clicked");
 		var code = editors[currentid].getValue();
@@ -1608,7 +1698,7 @@ window.onload = function() {
 			submissions.forEach(function(submission) {
 				// editors[1].setValue(submission.code);
 
-				console.log(tabOrder);
+				// console.log(tabOrder);
 				// parse the code from submit
 				var splitString = submission.code.split(/\/\/\s\/\*\/|\?end\?/);
 				console.log(splitString);
@@ -1672,8 +1762,8 @@ window.onload = function() {
 				}
 				$("#demoTabs").tabs("refresh");
 				$("#demoTabs").tabs("option", "active", 0);
-				$('.CodeMirror').each(function(i, el){
-    				el.CodeMirror.refresh();
+				$('.CodeMirror').each(function(i, el) {
+					el.CodeMirror.refresh();
 				});
 			});
 		});
@@ -1726,7 +1816,7 @@ window.onload = function() {
 
 			var code = '';
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-				code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
+				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
 					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 			}
 
@@ -1852,17 +1942,17 @@ window.onload = function() {
 	});
 
 	function publishCode() {
-	if ($("#pubCodeIcon").hasClass('glyphicon-share')) {
-		$("#pubCodeIcon").removeClass('glyphicon-share');
-	}
-	$("#pubCodeIcon").addClass('glyphicon-ban-circle');
+		if ($("#pubCodeIcon").hasClass('glyphicon-share')) {
+			$("#pubCodeIcon").removeClass('glyphicon-share');
+		}
+		$("#pubCodeIcon").addClass('glyphicon-ban-circle');
 
-	// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
+		// var code = editor.getValue() + '\n' + editor2.getValue() + '\n' + editor3.getValue();
 
 		var code = '';
 
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
-			code = code + editors[tabOrder[i - 1].charAt(5)].getValue()  +
+			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
 				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
 			if (editors[tabOrder[i - 1]] === null) {
 				continue;

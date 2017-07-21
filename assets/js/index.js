@@ -1316,11 +1316,11 @@ window.onload = function() {
 		if (tabid == 0) {
 			alert("You can't delete the first console");
 		} else {
-			var list = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").attr(
-				'id');
-			var tab = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").remove();
+			// var list = $("#demoTabs").find(".ui-tabs-nav li:eq(" + tabid + ")").attr('id');
+			var list = $("ul#sortable li.ui-tabs-active").attr('id');
+			var tab = $("ul#sortable li.ui-tabs-active").remove();
 
-			var listid = "#list_" + getCurrent();
+			// var listid = "#list_" + getCurrent();
 			var index1 = tabOrder.indexOf(list);
 			tabOrder.splice(index1, 1);
 
@@ -1345,6 +1345,7 @@ window.onload = function() {
 
 	$("#testTab").click(function() {
 		var code = tabData[ref_this].editor.getValue();
+		console.log(ref_this);
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1691,7 +1692,7 @@ window.onload = function() {
 
 	$("#test").click(function() {
 		var code = '';
-		console.log(tabOrder);
+		// console.log(tabOrder);
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			// code = code + editors[i].getValue() + '\n';
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() + '\n';
@@ -1736,6 +1737,7 @@ window.onload = function() {
 				tabName = {};
 				editors = [];
 				tabData = {};
+				tabOrder = [];
 				num_tabs = contents.length;
 				console.log(num_tabs);
 				for (var i = 1; i < contents.length + 1; i++) {
@@ -1748,7 +1750,9 @@ window.onload = function() {
 						i + "'>" + contents[i - 1] + "</textarea></div></div>"
 					);
 					var listname = "list_" + i;
+					tabOrder.push(listname);
 					tabName[listname] = names[i - 1];
+
 
 					editors[i] = CodeMirror.fromTextArea(document.getElementById(
 						"codemirror" +

@@ -1369,7 +1369,9 @@ window.onload = function() {
 		}
 
 		$("<li id='list_" + num_tabs + "'><a href='#editor" +
-			num_tabs + "'>" + tab_name + "</a></li>").appendTo(
+			num_tabs + "'>" + tab_name +
+			"</a></li>"
+		).appendTo(
 			"#demoTabs .ui-tabs-nav");
 
 		$("#demoTabs .tab-content").append(
@@ -1454,6 +1456,7 @@ window.onload = function() {
 	$(function() {
 		$("#sortable").sortable({
 			distance: 30,
+			cancel: ".fixed",
 			stop: function(event, ui) {
 				tabOrder = $(this).sortable('toArray');
 				console.log(tabOrder);

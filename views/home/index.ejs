@@ -278,6 +278,10 @@ div.pds_hidden {
   overflow-x: auto;
 }
 
+#sortable>li:hover{
+  background-color: #337ab7;
+}
+
 
 </style>
 
@@ -860,22 +864,27 @@ document.title="Bricks 4.0 JavaScript";
 
     <div id="demoTabs">
         <ul id="sortable" class="nav nav-pills" style = "margin-left:170px;">
-          <li id="list_1"><a href="#main">Main</a></li>
+          <li id="list_1" class="fixed"><a href="#main">Main</a>
+          </li>
 
 
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]) { %>
-            <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]%></a></li>
+            <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]%></a>
+            </li>
           <% } %>
 
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]) { %>
-            <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]%></a></li>
+            <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]%></a>
+            </li>
           <% } %>
 
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
-            <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]%></a></li>
+            <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]%></a>
+            </li>
           <% } %>
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
-            <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]%></a></li>
+            <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]%></a>
+            </li>
           <% } %>
 
         </ul>

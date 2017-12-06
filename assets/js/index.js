@@ -465,7 +465,8 @@ function fillReloadModal(submission) {
 	$("#loadSubmission").click(function() {
 		// console.log(tabOrder);
 		// parse the code from submit
-		var splitString = submission.code.split(/\/\/\s\/\*\/|\?end\?/);
+		var splitString = submission.code.split(/\/\/\s\/\*\/|\/\/\*\//);
+
 
 		// name array for name of consoles and content array for content in consoles
 		var names = [];
@@ -475,7 +476,7 @@ function fillReloadModal(submission) {
 			names.push(splitString[p + 1]);
 			p++;
 		}
-		console.log(contents);
+		// console.log(contents);
 		// console.log(names);
 
 		$('#sortable').empty();
@@ -531,8 +532,8 @@ function fillReloadModal(submission) {
 				editor: editors[i]
 			};
 		}
-		console.log(tabData);
-		console.log(tabOrder);
+		// console.log(tabData);
+		// console.log(tabOrder);
 		$("#demoTabs").tabs("refresh");
 		$("#demoTabs").tabs("option", "active", 0);
 		$('.CodeMirror').each(function(i, el) {
@@ -1193,7 +1194,7 @@ function getPublishedCode() {
 			console.log("get published code");
 			var txt = share.code;
 			if (!(txt == null)) {
-				var splitString = txt.split(/\/\/\s\/\*\/|\?end\?/);
+				var splitString = txt.split(/\/\/\s\/\*\/|\/\/\*\//);
 				console.log(splitString);
 
 				// name array for name of consoles and content array for content in consoles
@@ -1330,7 +1331,7 @@ window.onload = function() {
 			console.log(tabOrder);
 
 			delete tabData[list];
-			console.log(tabData);
+			// console.log(tabData);
 			$("#demoTabs").tabs("refresh");
 
 		}
@@ -1345,7 +1346,7 @@ window.onload = function() {
 
 	$("#testTab").click(function() {
 		var code = tabData[ref_this].editor.getValue();
-		console.log(ref_this);
+		// console.log(ref_this);
 		$("#console").empty();
 		try {
 			eval(code);
@@ -1359,7 +1360,7 @@ window.onload = function() {
 
 	$("#addTabs").click(function() {
 		num_tabs++;
-		console.log(num_tabs);
+		// console.log(num_tabs);
 
 		var tab_name = document.getElementById("tabname").value;
 		$("#tabname").val("");
@@ -1544,7 +1545,7 @@ window.onload = function() {
 
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
-					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+					"// /*/" + tabName[tabOrder[i - 1]] + "//*/" + '\n';
 				if (editors[tabOrder[i - 1]] === null) {
 					continue;
 				}
@@ -1720,7 +1721,9 @@ window.onload = function() {
 
 				// console.log(tabOrder);
 				// parse the code from submit
-				var splitString = submission.code.split(/\/\/\s\/\*\/|\?end\?/);
+				var splitString = submission.code.split(/\/\/\s\/\*\/|\/\/\*\//);
+
+
 				console.log(splitString);
 
 				// name array for name of consoles and content array for content in consoles
@@ -1804,7 +1807,7 @@ window.onload = function() {
 		console.log(tabOrder);
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
-				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+				"// /*/" + tabName[tabOrder[i - 1]] + "//*/" + '\n';
 		}
 		console.log(code);
 		$.post("/user/saveCode", {
@@ -1846,7 +1849,7 @@ window.onload = function() {
 			var code = '';
 			for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 				code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
-					"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+					"// /*/" + tabName[tabOrder[i - 1]] + "//*/" + '\n';
 			}
 
 			try {
@@ -1982,7 +1985,7 @@ window.onload = function() {
 
 		for (var i = 1; i < $("div#demoTabs ul li").length + 1; i++) {
 			code = code + editors[tabOrder[i - 1].charAt(5)].getValue() +
-				"// /*/" + tabName[tabOrder[i - 1]] + "?end?" + '\n';
+				"// /*/" + tabName[tabOrder[i - 1]] + "//*/" + '\n';
 			if (editors[tabOrder[i - 1]] === null) {
 				continue;
 			}

@@ -866,24 +866,22 @@ document.title="Bricks 4.0 JavaScript";
         <ul id="sortable" class="nav nav-pills" style = "margin-left:170px;">
           <li id="list_1" class="fixed"><a href="#main">Main</a>
           </li>
-
-
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]) { %>
-            <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]%></a>
+            <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[3]%></a>
             </li>
           <% } %>
 
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]) { %>
-            <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]%></a>
+            <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[5]%></a>
             </li>
           <% } %>
 
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
-            <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]%></a>
+            <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[7]%></a>
             </li>
           <% } %>
           <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
-            <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]%></a>
+            <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[9]%></a>
             </li>
           <% } %>
 
@@ -902,7 +900,7 @@ document.title="Bricks 4.0 JavaScript";
               <!--CodeMirror Start-->
               <div class="row" style="height:100%">
                 <% if (req.isAuthenticated()) { %>
-                    <textarea id="codemirror1"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[0]%></textarea>
+                    <textarea id="codemirror1"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[0]%></textarea>
                 <%} else {%>
                     <textarea id="codemirror1"></textarea>
                 <%}%>
@@ -914,7 +912,7 @@ document.title="Bricks 4.0 JavaScript";
           <div id="editor2" class="tab-pane">
               <!--CodeMirror Start-->
               <div class="row" style="height:100%">
-                    <textarea id="codemirror2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[2]%></textarea>
+                    <textarea id="codemirror2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[2]%></textarea>
               </div>
 
               <!--CodeMirror End-->
@@ -924,7 +922,7 @@ document.title="Bricks 4.0 JavaScript";
 
             <!--CodeMirror Start-->
             <div class="row" style="height:100%">
-                  <textarea id="codemirror3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[4]%></textarea>
+                  <textarea id="codemirror3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[4]%></textarea>
             </div>
 
             <!--CodeMirror End-->
@@ -934,7 +932,7 @@ document.title="Bricks 4.0 JavaScript";
 
             <div id="editor4" class="tab-pane">
               <div class="row" style="height:100%">
-                    <textarea id="codemirror4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[6]%></textarea>
+                    <textarea id="codemirror4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[6]%></textarea>
               </div>
             </div>
           <% } %>
@@ -943,7 +941,7 @@ document.title="Bricks 4.0 JavaScript";
 
             <div id="editor5" class="tab-pane">
               <div class="row" style="height:100%">
-                    <textarea id="codemirror5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[8]%></textarea>
+                    <textarea id="codemirror5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[8]%></textarea>
               </div>
             </div>
           <% } %>
